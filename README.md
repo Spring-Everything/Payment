@@ -16,5 +16,7 @@
 
 <h2 style="display: inline-block; vertical-align: middle;">📝 결제 API</h2>
 
-- PG
-- 아임포트
+- 아임포트 -> 포트원 (변경)
+- PG -> KG이니시스 (선택)
+
+
