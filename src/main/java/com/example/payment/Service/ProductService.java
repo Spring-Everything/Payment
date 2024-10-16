@@ -25,6 +25,10 @@ public class ProductService {
     private static final Logger logger = LoggerFactory.getLogger(ProductService.class);
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
+    private final RestTemplate restTemplate;
+
+    @Value("${payment.iamport.url}")
+    private String portoneApiUrl;
 
     @Value("${payment.iamport.api_key}")
     private String apiKey;
@@ -71,7 +75,10 @@ public class ProductService {
         String accessToken = getAccessToken();
 
         // 2. 결제 API 호출
-        return callPaymentAPI(productId, amount, accessToken);
+        String paymentUrl = callPaymentAPI(productId, amount, accessToken);
+
+        // 결제 창 호출
+        return initiatePayment(productId.toString(), String.valueOf(amount)); // 결제 창 URL 반환
     }
 
     // 결제 토큰 발급 메서드
@@ -129,6 +136,41 @@ public class ProductService {
         } else {
             logger.error("결제 실패! 상품 ID: " + productId);
             throw new RuntimeException("결제 실패!");
+        }
+    }
+
+    // 결제 창 호출
+    public String initiatePayment(String productId, String price) {
+        // 결제 요청 데이터 생성
+        String paymentData = "{"
+                + "\"product_id\": \"" + productId + "\","
+                + "\"price\": \"" + price + "\""
+                + "}";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/json");
+        headers.set("Authorization", "Bearer " + apiKey);
+
+        HttpEntity<String> entity = new HttpEntity<>(paymentData, headers);
+
+        // 포트원 API에 POST 요청
+        ResponseEntity<String> response = restTemplate.exchange(portoneApiUrl, HttpMethod.POST, entity, String.class);
+
+        if (response.getStatusCode().is2xxSuccessful()) {
+            try {
+                // 응답에서 결제 창 URL을 추출 (예: JSON 구조에서 `payment_url` 필드)
+                ObjectMapper objectMapper = new ObjectMapper();
+                JsonNode root = objectMapper.readTree(response.getBody());
+                String paymentUrl = root.path("response").path("payment_url").asText();
+
+                // 결제 창 URL 반환
+                return paymentUrl;
+            } catch (JsonProcessingException e) {
+                logger.error("포트원 API 응답 파싱 실패", e);
+                throw new RuntimeException("결제 창 URL 추출 실패");
+            }
+        } else {
+            throw new RuntimeException("결제 요청 실패");
         }
     }
 }

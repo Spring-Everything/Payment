@@ -23,7 +23,7 @@ public class ProductController {
     // 상품 전체 조회
     @GetMapping
     public List<ProductDTO> getAllProducts() {
-        return productService.getAllProducts(); // 상품 목록 반환
+        return productService.getAllProducts();
     }
 
     // id로 상품 조회
@@ -36,5 +36,11 @@ public class ProductController {
     @PostMapping("/pay/{productId}")
     public ResponseEntity<String> processPayment(@PathVariable Long productId) {
         return ResponseEntity.ok(productService.processPayment(productId));
+    }
+
+    // 결제 창 호출
+    @PostMapping("/initiate/{productId}/{price}")
+    public ResponseEntity<String> initiatePayment(@PathVariable String productId, @PathVariable String price) {
+            return ResponseEntity.ok(productService.initiatePayment(productId, price));
     }
 }

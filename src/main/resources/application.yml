@@ -3,6 +3,7 @@ payment:
     api_key: ${IAMPORT_API_KEY}
     api_secret: ${IAMPORT_API_SECRET}
     base_url: "https://api.iamport.kr"
+    url: "https://api.portone.com/payment"
 
 jwt:
   secret: ${JWT_SECRET}
