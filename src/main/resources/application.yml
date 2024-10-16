@@ -1,3 +1,9 @@
+payment:
+  iamport:
+    api_key: ${IAMPORT_API_KEY}
+    api_secret: ${IAMPORT_API_SECRET}
+    base_url: "https://api.iamport.kr"
+
 jwt:
   secret: ${JWT_SECRET}
   expiration: 1800000
@@ -41,4 +47,3 @@ spring:
             token-uri: https://kauth.kakao.com/oauth/token
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
-

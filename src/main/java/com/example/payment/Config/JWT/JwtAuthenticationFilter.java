@@ -1,7 +1,6 @@
 package com.example.payment.Config.JWT;
 
 import com.example.payment.Service.UserDetailsServiceImpl;
-import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
