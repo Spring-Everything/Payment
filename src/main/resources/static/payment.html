@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>상품 결제</title>
     <link rel="stylesheet" href="payment.css">
+    <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 </head>
 <body>
 <div class="container">
@@ -13,7 +14,7 @@
 </div>
 
 <!-- 결제 방식 선택 팝업 -->
-<div id="payment-modal" class="modal">
+<div id="payment-modal" class="modal" style="display: none;">
     <div class="modal-content">
         <h2>결제 방법을 선택하세요</h2>
         <button id="card-payment">카드 결제</button>
